@@ -17,6 +17,7 @@ os.chdir("/home/alveslab/RGB_Imgs")
 
 class VideoScreenshot(object):
     def __init__(self, src_list, camera_names, screenshot_interval, disk_limit, duration):
+        self.src_list = src_list  # Store the RTSP URLs
         self.capture_list = []
         self.frame_list = []
         self.status_list = []
@@ -69,7 +70,7 @@ class VideoScreenshot(object):
             write_log("INFO", f"Attempting to reconnect to camera {self.camera_names[index]}", verbose=1)
             self.capture_list[index].release()
             time.sleep(2)  # Short delay before attempting to reconnect
-            self.capture_list[index] = cv2.VideoCapture(self.capture_list[index].getBackendName())
+            self.capture_list[index] = cv2.VideoCapture(self.src_list[index])  # Reuse the stored RTSP URL
             if self.capture_list[index].isOpened():
                 write_log("INFO", f"Reconnected to camera {self.camera_names[index]}", verbose=1)
             else:
